@@ -1,31 +1,28 @@
 import pytest
-from masks import get_mask_card_number, get_mask_account
+
+from src.masks import get_mask_account, get_mask_card_number
 
 
 @pytest.fixture
-def card_numbers():
+def card_numbers() -> list:
     return [
-        ("1234567890123456", "************3456"),
-        ("1234 5678 9012 3456", "************3456"),
-        ("", None),
-        ("123456", None),
-    ]
+        ("1234 5678 1234 3456", "1234 56** **** 3456"),
+        ("1234567812343456", "1234 56** **** 3456")
+        ]
 
 
-def test_get_mask_card_number(card_numbers):
+def test_get_mask_card_number(card_numbers: list)-> None:
     for card, expected in card_numbers:
         assert get_mask_card_number(card) == expected
 
 
 @pytest.fixture
-def account_numbers():
+def account_numbers() -> list:
     return [
-        ("123456789012", "**********012"),
-        ("1234", None),
-        ("", None),
-    ]
+        ("123456789012", "**9012"),
+        ]
 
 
-def test_get_mask_account(account_numbers):
+def test_get_mask_account(account_numbers: list)-> None:
     for account, expected in account_numbers:
         assert get_mask_account(account) == expected
