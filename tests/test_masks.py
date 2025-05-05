@@ -11,7 +11,7 @@ def card_numbers() -> list:
         ]
 
 
-def test_get_mask_card_number(card_numbers: list)-> None:
+def test_get_mask_card_number(card_numbers: list) -> None:
     for card, expected in card_numbers:
         assert get_mask_card_number(card) == expected
 
@@ -23,6 +23,6 @@ def account_numbers() -> list:
         ]
 
 
-def test_get_mask_account(account_numbers: list)-> None:
+def test_get_mask_account(account_numbers: list) -> None:
     for account, expected in account_numbers:
         assert get_mask_account(account) == expected
