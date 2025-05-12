@@ -1,7 +1,7 @@
 import functools
 
 
-def log(filename):
+def log(filename=None):
     """
     Декоратор для логирования начала и конца выполнения функции, а также ее результатов или ошибок.
 
@@ -13,16 +13,18 @@ def log(filename):
         def wrapper(*args, **kwargs):
             try:
                 result = func(*args, **kwargs)
-                message = f"Called {func.__name__} with args: {args}, kwargs: {kwargs}. Result: {result}"
+                message = f"{func.__name__} ok"
+                if filename:
+                    with open(filename, 'a') as f:
+                        f.write(message)
                 print(message)  # Выводим сообщение в консоль
-                with open(filename, 'a') as f:
-                    f.write(message + '\n')
                 return result
             except Exception as e:
-                error_message = f"Error in {func.__name__}: {str(e)}"
+                error_message = f"{func.__name__} error: {type(e).__name__}"
+                if filename:
+                    with open(filename, 'a') as f:
+                        f.write(error_message)
                 print(error_message)  # Выводим сообщение об ошибке в консоль
-                with open(filename, 'a') as f:
-                    f.write(error_message + '\n')
                 raise  # Пробрасываем исключение дальше
         return wrapper
 
@@ -38,12 +40,12 @@ my_function(1, 2)  # Вызов функции
 
 
 @log(filename="../mylog.txt")
-def my_function_error(x, y):
+def my_function(x, y):
     return x / y  # Это вызовет ZeroDivisionError
 
 
 # Вызываем функцию с ошибкой
 try:
-    my_function_error(1, 0)
+    my_function(1, 0)
 except ZeroDivisionError:
     pass  # Игнорируем ошибку для теста
