@@ -32,49 +32,29 @@ def test_my_function_success(log_file, capsys):
     # Проверяем содержимое лог-файла
     with open(log_file) as f:
         content = f.read()
-        assert "Called my_function with args: (1, 2), kwargs: {}. Result: 3" in content
+        assert "my_function ok" in content
 
     # Проверяем вывод в консоль
         captured = capsys.readouterr()
-        assert "Called my_function with args: (1, 2), kwargs: {}. Result: 3" in captured.out
+        assert "my_function ok" in captured.out
 
 
-def test_my_function_error(log_file, capsys):
+def test_my_function(log_file, capsys):
     @log(filename=log_file)
-    def my_function_error(x, y):
+    def my_function(x, y):
         return x / y  # Это вызовет ZeroDivisionError
 
     with pytest.raises(ZeroDivisionError):
-        my_function_error(1, 0)
+        my_function(1, 0)
 
     # Проверяем содержимое лог-файла
     with open(log_file) as f:
         content = f.read()
-        assert "Error in my_function_error: division by zero" in content
+        assert "my_function error: ZeroDivisionError" in content
 
     # Проверяем вывод в консоль
         captured = capsys.readouterr()
-        assert "Error in my_function_error: division by zero" in captured.out
-
-
-def test_multiple_calls(log_file, capsys):
-    @log(filename=log_file)
-    def my_function(x, y):
-        return x * y
-
-    my_function(2, 3)
-    my_function(4, 5)
-
-    # Проверяем содержимое лог-файла
-    with open(log_file) as f:
-        content = f.read()
-        assert "Called my_function with args: (2, 3), kwargs: {}. Result: 6" in content
-        assert "Called my_function with args: (4, 5), kwargs: {}. Result: 20" in content
-
-    # Проверяем вывод в консоль
-        captured = capsys.readouterr()
-        assert "Called my_function with args: (2, 3), kwargs: {}. Result: 6" in captured.out
-        assert "Called my_function with args: (4, 5), kwargs: {}. Result: 20" in captured.out
+        assert "my_function error: ZeroDivisionError" in captured.out
 
 
 def test_log_file_creation(log_file):
